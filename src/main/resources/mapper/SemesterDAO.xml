@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liliang.dao.SemesterDAO">
+	<resultMap id="SemesterMap" type="Semester">
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="status" property="status" />
+	</resultMap>
+	
+	<select id="getSemesterById" resultType="Semester" >
+	select id,name,status from semester where id =#{id}
+	</select>
+	<select id="getNowSemester" resultType="Semester">
+	select id,name,status from semester where status =1
+	</select>
+	<select id="getNextSemester" resultType="Semester">
+	select id,name,status from semester where status =2
+	</select>
+	
+	
+
+</mapper>

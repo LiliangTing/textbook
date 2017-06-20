@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liliang.dao.PurviewDAO">
+	<resultMap id="PurviewMap" type="Purview">
+		<result column="url" property="url" />
+		<result column="level" property="level" />
+		<result column="post" property="post" />
+		<result column="status" property="status" />
+	</resultMap>
+
+	<select id="getByUri" resultMap="PurviewMap">
+		select
+		url,level,post,status from
+		purview where url =#{uri}
+	</select>
+
+
+</mapper>

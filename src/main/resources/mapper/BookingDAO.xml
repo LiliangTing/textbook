@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liliang.dao.BookingDAO">
+	<resultMap id="BookingMap" type="Booking">
+		<id column="id" property="id" />
+		<result column="sno" property="sno" />
+		<result column="cour_sem_id" property="courSemId" />
+		<result column="time" property="time" />
+		<result column="discount" property="discount" />
+		<result column="sem_id" property="semId" />
+		<result column="falg" property="falg"/>
+		<result column="status" property="status" />
+		<association property="student" column="sno"
+			select="com.liliang.dao.StudentDAO.getStudentById" />
+		<association property="sem" column="sem_id"
+			select="com.liliang.dao.SemesterDAO.getSemesterById" />
+		<association property="bookCourSem" column="cour_sem_id"
+			select="com.liliang.dao.CourSemDAO.getById" />
+
+	</resultMap>
+
+	<insert id="booking">
+		insert ignore into booking(
+		sno,cour_sem_id,discount,sem_id,flag
+		)values(
+		#{sno},#{courSemId},#{discount},#{semId},#{flag}
+		)
+	</insert>
+	<sql id="basisSql">
+		id,sno,cour_sem_id,time,discount,sem_id,status
+	</sql>
+	<select id="getCSIdBySno" resultMap="BookingMap">
+		select cour_sem_id from
+		booking where
+		sno=#{sno} and status =1
+	</select>
+	<select id="getBySnoSemId" resultMap="BookingMap">
+		select
+		<include refid="basisSql" />
+		from booking where sno=#{sno}
+		and sem_id=#{semId}
+	</select>
+	<select id="getBySno" resultMap="BookingMap">
+		select
+		<include refid="basisSql" />
+		from booking where sno=#{sno}
+	</select>
+	<update id="unbooking">
+		update ignore booking set status =0 where id=#{id}
+	</update>
+	<select id="getById" resultMap="BookingMap">
+		select
+		<include refid="basisSql" />
+		from booking where id=#{id}
+	</select>
+
+</mapper>

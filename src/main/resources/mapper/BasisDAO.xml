@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liliang.dao.BasisDAO">
+	<resultMap id="BasisMap" type="Basis">
+		<result column="username" property="username" />
+		<result column="name" property="name" />
+		<result column="sex" property="sex" />
+		<result column="phone" property="phone" />
+		<result column="level" property="level" />
+		<result column="status" property="status" />
+	</resultMap>
+	<sql id="basisSql">
+		username,name,sex,phone,level,status
+	</sql>
+	<sql id="insertSql">
+		username,name,level
+	</sql>
+	<select id="getBasisById" resultType="Basis">
+		select
+		<include refid="basisSql" />
+		from basis
+		where username=#{id} and status=1
+	</select>
+	<insert id="insertBasis">
+		insert ignore into success_killed(
+		<include refid="insertSql" />
+		)
+		values(#{username},#{name},#{level})
+	</insert>
+	<update id="updatePassword">
+		update basis set password=#{password} where
+		username=#{username}
+	</update>
+	<update id="updateBasis" parameterType="Basis">
+		update basis set username=username,
+		<if test="#{name} !=null">
+			and name=#{name},
+		</if>
+		<if test="#{sex} !=null">
+			and sex=#{sex},
+		</if>
+		<if test="#{phone} !=null">
+			and phone=#{phone},
+		</if>
+		where username=#{username}
+	</update>
+	<select id="getPassword" resultType="String" parameterType="String">
+		select password from basis where username=#{id}
+	</select>
+	<update id="delectBasisById" parameterType="String">
+		update basis set
+		status=0 where username=${id}
+	</update>
+
+
+</mapper>

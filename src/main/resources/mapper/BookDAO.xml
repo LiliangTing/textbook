@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liliang.dao.BookDAO">
+	<resultMap id="BookMap" type="Book">
+		<result column="isbn13" property="isbn13" />
+		<result column="title" property="title" />
+		<result column="publisher" property="publisher" />
+		<result column="author" property="author" />
+		<result column="price" property="price" />
+		<result column="discount" property="discount" />
+		<result column="summary" property="summary" />
+		<result column="catalog" property="catalog" />
+	</resultMap>
+
+	<select id="getById" resultMap="BookMap">
+		select
+		isbn13,title,publisher,author,price,discount,summary,catalog
+		from book
+		where isbn13 =#{isbn13}
+	</select>
+	<insert id="add" parameterType="Book">
+		insert into book(isbn13,title,publisher,author,price,summary,catalog)
+		values(#{isbn13},#{title},#{publisher},#{author},#{price},#{summary},#{catalog})
+	</insert>
+	<update id="setDiscount">
+		update book set discount=#{discount} where isbn13=#{isbn}
+	</update>
+
+
+</mapper>

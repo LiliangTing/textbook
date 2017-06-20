@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liliang.dao.ClassesDAO">
+	<resultMap id="ClassesMap" type="Classes">
+		<result column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="status" property="status" />
+	</resultMap>
+
+	<select id="getClassesById" resultType="Classes">
+		select
+		id,title,status
+		from classes where id =#{id}
+	</select>
+
+	<select id="getClassByYear" resultType="Classes">
+		select
+		id,title,status from classes where title like cancat('__%',${year},'%')
+		<if test="type==1">
+			and title like 'RB%'
+		</if>
+		<if test="type==2">
+			and title like 'RZ%'
+		</if>
+		and status = 1
+	</select>
+</mapper>

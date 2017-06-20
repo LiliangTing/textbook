@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liliang.dao.CourSemDAO">
+	<resultMap id="CourSemMap" type="CourSem">
+		<id column="id" property="id" />
+		<result column="sem_id" property="semId" />
+		<result column="class_id" property="classId" />
+		<result column="cour_id" property="courId" />
+		<result column="teacher_id" property="teacherId" />
+		<result column="isbn" property="isbn" />
+		<result column="choose" property="choose" />
+		<result column="status" property="status" />
+		<association property="classes" column="class_id"
+			select="com.liliang.dao.ClassesDAO.getClassesById" />
+		<association property="courses" column="cour_id"
+			select="com.liliang.dao.CoursesDAO.getCoursesById" />
+		<association property="basis" column="teacher_id"
+			select="com.liliang.dao.BasisDAO.getBasisById" />
+		<association property="semester" column="sem_id"
+			select="com.liliang.dao.SemesterDAO.getSemesterById" />
+		<!-- 教材选定人 -->
+		<association property="choo" column="choose"
+			select="com.liliang.dao.BasisDAO.getBasisById" />
+		<association property="book" column="isbn"
+			select="com.liliang.dao.BookDAO.getById" />
+	</resultMap>
+	<sql id="coueSemSql">
+		id,sem_id,cour_id,class_id,teacher_id,isbn,choose,status
+	</sql>
+	<sql id="insertSql">
+		sem_id,class_id,teacher_id
+	</sql>
+	<!-- 按照教师ID和学期获取课程信息 -->
+	<select id="getCourSemByTeacherId" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql"></include>
+		from cour_sem
+		where
+		teacher_id=#{teacherId} and sem_id =#{semId}
+	</select>
+	<!-- 按照教师ID获取课程ID -->
+	<select id="getIdByTeacherId" resultType="String">
+		select
+		id
+		from cour_sem
+		where
+		teacher_id=#{teacherId} and sem_id =#{semId}
+	</select>
+	<!-- 按照教师获取所有学期课程 -->
+	<select id="getCourSemAllByTeacherId" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql" />
+		from cour_sem
+		where teacher_id=#{teacherId} order by sem_id DESC
+	</select>
+	<!-- 按照ID获取信息 -->
+	<select id="getById" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql" />
+		from cour_sem
+		where id=#{id}
+	</select>
+	<!-- 添加图书信息 -->
+	<update id="addBookTeacher">
+		update cour_sem set
+		isbn=#{isbn},choose=#{teacherId}
+		where
+		cour_id=#{courId} and sem_id=(select id from semester where
+		status=1)
+	</update>
+	<!-- 按照课程获取信息 -->
+	<select id="getByCourId" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql" />
+		from cour_sem
+		where cour_id=#{courId}
+	</select>
+	<!-- 按照班级和学期获取课程信息 -->
+	<select id="getByClassId" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql" />
+		from cour_sem
+		where class_id=#{classId} and sem_id=#{semId} and
+		status=1
+	</select>
+	<!--获取全部的班级课程信息 -->
+	<select id="getAllByClassId" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql" />
+		from cour_sem
+		where class_id=#{classId} and status=1
+	</select>
+	<!--获取全部课程信息 -->
+	<select id="getAllCourSem" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql" />
+		from cour_sem
+		where status=1
+	</select>
+	<!--按照获取课程课程信息 -->
+	<select id="getCourSemBySemId" resultMap="CourSemMap">
+		select
+		<include refid="coueSemSql" />
+		from cour_sem
+		where sem_id=#{semId} and status=1
+	</select>
+
+
+</mapper>
