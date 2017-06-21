@@ -23,13 +23,13 @@
 
 	<insert id="booking">
 		insert ignore into booking(
-		sno,cour_sem_id,discount,sem_id,flag
+		sno,cour_sem_id,discount,sem_id,falg
 		)values(
 		#{sno},#{courSemId},#{discount},#{semId},#{flag}
 		)
 	</insert>
 	<sql id="basisSql">
-		id,sno,cour_sem_id,time,discount,sem_id,status
+		id,sno,cour_sem_id,time,discount,sem_id,falg,status
 	</sql>
 	<select id="getCSIdBySno" resultMap="BookingMap">
 		select cour_sem_id from

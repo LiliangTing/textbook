@@ -149,7 +149,6 @@
 											<td class="center"><a
 												href="student/bookingBook/${courSem.id}">预订</a></td>
 										</tr>
-
 									</c:forEach>
 									<c:if test="${msg != null}">
 										<tr>
@@ -206,7 +205,14 @@
 										<td class="center">${booking.bookCourSem.book.publisher}</td>
 										<td class="center">${booking.bookCourSem.classes.title }</td>
 										<c:if test="${booking.status == 1 }">
-											<td class="center"><a href="student/unbooking/${booking.id}">退订</a></td>
+											<c:if test="${booking.falg==1}">
+												<td class="center"><span
+													class="label label-sm label-warning">不允许退订</span></td>
+											</c:if>
+											<c:if test="${booking.falg==0}">
+												<td class="center"><a
+													href="student/unbooking/${booking.id}">退订</a></td>
+											</c:if>
 										</c:if>
 										<c:if test="${booking.status==0}">
 											<td class="center"><span
@@ -220,7 +226,6 @@
 										<td class="center" colspan="10">${message}</td>
 									</tr>
 								</c:if>
-
 							</tbody>
 						</table>
 					</div>

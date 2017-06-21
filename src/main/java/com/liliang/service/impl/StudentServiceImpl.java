@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liliang.dao.ClassesDAO;
 import com.liliang.dao.StudentDAO;
 import com.liliang.entry.Classes;
 import com.liliang.entry.Student;
@@ -18,6 +19,8 @@ public class StudentServiceImpl implements StudentService {
 
 	@Autowired
 	private StudentDAO studnetDAO;
+	@Autowired
+	private ClassesDAO classesDAO;
 
 	public int getStudnetPost(String id) {
 		Student s = this.studnetDAO.getStudentById(id);
@@ -42,13 +45,38 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public ResultDO<Map<String, List<Student>>> getByClassId(List<Classes> list) {
-		ResultDO<Map<String,List<Student>>> result=new ResultDO<Map<String,List<Student>>>();
-		Map<String,List<Student>> map=new HashMap<String, List<Student>>();
-		for(Classes c:list){
-			List<Student> slist=this.studnetDAO.getStudentByClass(c.getId());
-			map.put(c.getId(),slist);
+		ResultDO<Map<String, List<Student>>> result = new ResultDO<Map<String, List<Student>>>();
+		Map<String, List<Student>> map = new HashMap<String, List<Student>>();
+		for (Classes c : list) {
+			List<Student> slist = this.studnetDAO.getStudentByClass(c.getId());
+			map.put(c.getId(), slist);
 		}
 		result.setResult(map);
+		return result;
+	}
+
+	@Override
+	public ResultDO<List<Classes>> getAllClass() {
+
+		ResultDO<List<Classes>> result = new ResultDO<List<Classes>>();
+		List<Classes> list = this.classesDAO.getAll(1);
+		if (list != null && list.size() > 0) {
+			result.setResult(list);
+			result.setSuccess(true);
+		} else {
+			result.setMessage("未查找到班级");
+			result.setSuccess(false);
+		}
+		return result;
+	}
+
+	@Override
+	public ResultDO<Map<String, List<Student>>> getByClassId(String classId) {
+		ResultDO<Map<String, List<Student>>> result = new ResultDO<>();
+		Map<String, List<Student>> map = new HashMap<String, List<Student>>();
+		map.put(classId, this.studnetDAO.getStudentByClass(classId));
+		result.setResult(map);
+		result.setSuccess(true);
 		return result;
 	}
 

@@ -11,5 +11,7 @@ public interface ClassesDAO {
 	Classes getClassesById(String id);
 	
 	List<Classes> getClassByYear(@Param("type")int type,@Param("year")int year);
+	
+	List<Classes> getAll(int status);
 
 }

@@ -40,7 +40,7 @@
 							class="clip-data"></i> <span class="title"> 预约管理 </span><i
 							class="icon-arrow"></i> <span class="selected"></span> </a>
 						<ul class="sub-menu">
-							<li id="bulkbooking"><a href=""> <span class="title">批量预订</span>
+							<li id="bulkbooking"><a href="admin/tobulkbooking"> <span class="title">批量预订</span>
 							</a></li>
 						</ul></li>
 					<li id="systemmanage"><a href="javascript:void(0)"><i

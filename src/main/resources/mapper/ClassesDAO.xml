@@ -26,4 +26,11 @@
 		</if>
 		and status = 1
 	</select>
+	<select id="getAll" resultType="Classes">
+		select
+		id,title,status
+		from classes where status=#{status}
+	</select>
+	
+	
 </mapper>

@@ -2,6 +2,7 @@ package com.liliang.web;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.liliang.entry.Book;
+import com.liliang.entry.Classes;
 import com.liliang.entry.CourSem;
+import com.liliang.entry.Student;
 import com.liliang.entry.result.ResultDO;
 import com.liliang.service.BookService;
+import com.liliang.service.BookingService;
 import com.liliang.service.CourSemService;
+import com.liliang.service.StudentService;
 
 @Controller
 @RequestMapping("admin/")
@@ -28,6 +33,10 @@ public class AdminController {
 	private BookService bookservice;
 	@Autowired
 	private CourSemService courSemService;
+	@Autowired
+	private StudentService studentService;
+	@Autowired
+	private BookingService bookingService;
 
 	@RequestMapping(value = "toSetBookDiscount/{isbn13}")
 	public String toSetBookDiscount(Model model, @PathVariable("isbn13") String isbn13) {
@@ -61,9 +70,10 @@ public class AdminController {
 		}
 		int i = this.bookservice.setDiscount(isbn, new BigDecimal(discount));
 		map.put("url", "admin/viewBook");
-		map.put("status", new String()+i);
+		map.put("status", new String() + i);
 		return map;
 	}
+
 	@RequestMapping("bookHistory/{page}")
 	public String bookHistory(Model model, @PathVariable(value = "page") int page) {
 		PageHelper.startPage(page, 50);
@@ -71,6 +81,29 @@ public class AdminController {
 		model.addAttribute("page", pi);
 		return "admin/bookHistory";
 	}
-	public String toSetting
+
+	@RequestMapping(value = "tobulkbooking")
+	public String tobulkbooking(Model model) {
+		ResultDO<List<Classes>> classlist = this.studentService.getAllClass();
+		if (classlist.isSuccess()) {
+			model.addAttribute("classlist", classlist.getResult());
+		} else {
+			model.addAttribute("msg", classlist.getMessage());
+		}
+		return "admin/bulkbooking";
+	}
+
+	@RequestMapping("bulkbooking")
+	@ResponseBody
+	public Map<String, String> bulkbooking(@RequestParam("classIds[]") String[] classIds) {
+		Map<String, String> map = new HashMap<String, String>();
+		Map<String, List<Student>> studentMap = new HashMap<String, List<Student>>();
+		for (String classid : classIds) {
+			studentMap.putAll(this.studentService.getByClassId(classid).getResult());
+		}
+		int unsuccessCount = this.bookingService.bookingByList(studentMap);
+		map.put("status", new String() + unsuccessCount);
+		return map;
+	}
 
 }
