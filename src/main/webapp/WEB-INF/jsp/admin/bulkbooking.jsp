@@ -105,8 +105,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-				<div id="result">
-				</div>
+					<div id="result"></div>
 					<span id="msg" class="col-sm-12 control-label col-sm-offset2"
 						style="color: red"> ${msg}</span>
 				</div>
@@ -224,20 +223,27 @@
 			if (selected == null) {
 				document.getElementById("msg").innerHTML = "请选择班级";
 				return 
-
 			}
 			var uri = "admin/bulkbooking";
-			$.post(uri, {
-				Action : "post",
-				classIds : selected
-			},
-			function(result) {
-				$("#result").append("<div id='myAlert' class='alert alert-success'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong>成功！</strong>已经订购完成。</div>")
-				
-			}, "json");
-
+			$
+					.post(
+							uri,
+							{
+								Action : "post",
+								classIds : selected
+							},
+							function(result) {
+								if (result.status == 0) {
+									$("#result")
+											.append(
+													"<div id='myAlert' class='alert alert-success'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong>成功！</strong>已经订购完成。</div>")
+								} else {
+									$("#result")
+											.append(
+													"<div id='myAlert' class='alert alert-warning'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong>警告！</strong>有一些学生未完成订购，我们稍后将重试</div>")
+								}
+							}, "json");
 		}
 	</script>
-
 </body>
 </html>
